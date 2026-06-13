@@ -117,28 +117,49 @@
 }
 
 /* ======== CONTROLS ======== */
-.news-controls {
-  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
-  padding: 16px; border-radius: var(--radius);
+.news-toolbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+.filter-group {
+  display: inline-flex; border-radius: 8px; overflow: hidden;
+  border: 1px solid var(--border); background: var(--surface);
+}
+.filter-group .fg-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--text-3); padding: 0 10px;
+  display: flex; align-items: center; background: var(--bg-2);
+  border-right: 1px solid var(--border); white-space: nowrap;
+}
+.filter-group .chip {
+  font-size: 12px; font-weight: 500;
+  padding: 6px 14px; border: none; border-radius: 0;
+  background: transparent; color: var(--text-2);
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s; position: relative;
+}
+.filter-group .chip:hover { color: var(--text); background: var(--bg-2); }
+.filter-group .chip.active {
+  color: var(--accent); background: rgba(139,92,246,0.08);
+  font-weight: 600;
+}
+.filter-group .chip + .chip { border-left: 1px solid var(--border); }
+
+.search-wrap {
+  flex: 1; min-width: 180px; position: relative;
+}
+.search-wrap svg {
+  position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  color: var(--text-3); pointer-events: none;
+}
+.search-wrap input[type=search] {
+  width: 100%; padding: 7px 12px 7px 32px;
   background: var(--surface); border: 1px solid var(--border);
-  align-items: center;
+  border-radius: 8px; color: var(--text); font-size: 13px;
+  font-family: inherit; transition: border-color 0.15s;
 }
-.news-controls .group { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
-.news-controls label { font-size: 12px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; }
-.chip {
-  font-size: 13px; padding: 5px 12px; border-radius: 999px;
-  background: var(--bg-2); border: 1px solid var(--border);
-  color: var(--text-2); cursor: pointer; font-family: inherit; transition: all 0.15s;
-}
-.chip:hover { color: var(--text); border-color: var(--border-strong); }
-.chip.active { background: var(--accent); color: white; border-color: var(--accent); }
-.news-controls input[type=search] {
-  flex: 1; min-width: 200px; padding: 8px 12px;
-  background: var(--bg-2); border: 1px solid var(--border-strong);
-  border-radius: 8px; color: var(--text); font-size: 14px;
-  font-family: inherit;
-}
-.news-controls input[type=search]:focus { outline: none; border-color: var(--accent); }
+.search-wrap input[type=search]:focus { outline: none; border-color: var(--accent); }
+.search-wrap input[type=search]::placeholder { color: var(--text-3); }
 
 /* ======== NEWS GRID ======== */
 .news-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
@@ -221,23 +242,26 @@
       <p>Teknologi, AI, dan startup. Dikurasi otomatis dari 10+ sumber, di-refresh tiap jam.</p>
     </div>
 
-    <div class="news-controls" id="controls">
-      <div class="group">
-        <label>Kategori</label>
+    <div class="news-toolbar" id="controls">
+      <div class="filter-group">
+        <span class="fg-label">Kategori</span>
         <button class="chip active" data-cat="">Semua</button>
         <button class="chip" data-cat="ai">AI</button>
         <button class="chip" data-cat="tech">Tech</button>
         <button class="chip" data-cat="startup">Startup</button>
         <button class="chip" data-cat="dev">Dev</button>
       </div>
-      <div class="group">
-        <label>Bahasa</label>
+      <div class="filter-group">
+        <span class="fg-label">Bahasa</span>
         <button class="chip active" data-lang="">Semua</button>
         <button class="chip" data-lang="id">ID</button>
         <button class="chip" data-lang="en">EN</button>
       </div>
-      <input type="search" id="search" placeholder="Cari judul atau ringkasan…">
-      <button class="btn-refresh" id="refresh-btn" title="Admin only: refresh feed">↻ Refresh</button>
+      <div class="search-wrap">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="search" placeholder="Cari berita…">
+      </div>
+      <button class="btn-refresh" id="refresh-btn" title="Refresh feed">↻</button>
     </div>
 
     <div class="news-stats" id="stats"></div>
