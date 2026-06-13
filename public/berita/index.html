@@ -17,28 +17,31 @@
 /* ======== INLINE READER MODAL ======== */
 .reader-overlay {
   position: fixed; inset: 0; z-index: 1000;
-  background: rgba(0,0,0,0.7);
+  background: rgba(0,0,0,0.72);
   backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 40px 16px;
   opacity: 0; pointer-events: none;
   transition: opacity 0.25s ease;
+  overflow-y: auto;
 }
 .reader-overlay.open { opacity: 1; pointer-events: all; }
 
 .reader-panel {
-  width: 92vw; max-width: 720px; max-height: 90vh;
+  width: 100%; max-width: 740px;
   background: var(--bg); border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg); overflow-y: auto;
+  border-radius: var(--radius-lg);
   transform: translateY(24px) scale(0.97);
   transition: transform 0.25s ease;
   box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  margin-bottom: 40px;
 }
 .reader-overlay.open .reader-panel {
   transform: translateY(0) scale(1);
 }
 
 .reader-panel .reader-img {
-  width: 100%; height: 260px; object-fit: cover;
+  width: 100%; height: 280px; object-fit: cover;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   display: block; background: var(--surface);
 }
@@ -62,14 +65,35 @@
 }
 .reader-panel .reader-title {
   font-size: 22px; font-weight: 700; line-height: 1.3;
-  margin-bottom: 16px; color: var(--text);
+  margin-bottom: 20px; color: var(--text);
 }
-.reader-panel .reader-summary {
-  font-size: 15px; line-height: 1.7; color: var(--text-2);
-  margin-bottom: 24px;
+.reader-panel .reader-content {
+  font-size: 15.5px; line-height: 1.8; color: var(--text-2);
+  margin-bottom: 28px;
 }
+.reader-panel .reader-content p {
+  margin-bottom: 16px;
+}
+.reader-panel .reader-content p:last-child { margin-bottom: 0; }
+.reader-panel .reader-loading {
+  display: flex; align-items: center; gap: 12px;
+  padding: 40px 0; color: var(--text-3); font-size: 14px;
+}
+.reader-panel .reader-loading .spinner {
+  width: 20px; height: 20px; border: 2px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.reader-panel .reader-word-count {
+  font-size: 11px; color: var(--text-3); margin-bottom: 20px;
+  font-family: 'JetBrains Mono', monospace;
+}
+
 .reader-panel .reader-actions {
   display: flex; gap: 10px; flex-wrap: wrap;
+  padding-top: 20px; border-top: 1px solid var(--border);
 }
 .reader-panel .reader-actions a {
   display: inline-flex; align-items: center; gap: 6px;
@@ -81,11 +105,14 @@
   background: var(--accent); color: white;
 }
 .reader-panel .reader-actions .btn-source:hover { opacity: 0.85; }
-.reader-panel .reader-actions .btn-close {
+.reader-panel .reader-actions .btn-close-reader {
   background: var(--bg-2); color: var(--text-2);
   border: 1px solid var(--border); cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 600;
+  padding: 10px 20px; border-radius: 8px;
+  transition: all 0.15s;
 }
-.reader-panel .reader-actions .btn-close:hover {
+.reader-panel .reader-actions .btn-close-reader:hover {
   border-color: var(--border-strong); color: var(--text);
 }
 
@@ -230,12 +257,17 @@
         <span class="when" id="reader-when"></span>
       </div>
       <h2 class="reader-title" id="reader-title"></h2>
-      <div class="reader-summary" id="reader-summary"></div>
+      <div class="reader-loading" id="reader-loading">
+        <div class="spinner"></div>
+        <span>Mengambil artikel dari sumber asli…</span>
+      </div>
+      <div class="reader-word-count" id="reader-word-count"></div>
+      <div class="reader-content" id="reader-content" style="display:none"></div>
       <div class="reader-actions">
         <a class="btn-source" id="reader-source" href="#" target="_blank" rel="noopener noreferrer">
           Baca di sumber asli ↗
         </a>
-        <button class="btn-close" id="reader-close">✕ Tutup</button>
+        <button class="btn-close-reader" id="reader-close">✕ Tutup</button>
       </div>
     </div>
   </div>
@@ -284,11 +316,21 @@ function fullDate(iso) {
   return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 
+function nl2p(text) {
+  return text.split(/\n{2,}/)
+    .map(p => p.trim())
+    .filter(p => p.length > 0)
+    .map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`)
+    .join('');
+}
+
 /* ======== INLINE READER ======== */
 const overlay = document.getElementById('reader-overlay');
-const readerPanel = document.getElementById('reader-panel');
+const readerLoading = document.getElementById('reader-loading');
+const readerContent = document.getElementById('reader-content');
+const readerWordCount = document.getElementById('reader-word-count');
 
-function openReader(idx) {
+async function openReader(idx) {
   const it = allItems[idx];
   if (!it) return;
 
@@ -305,11 +347,38 @@ function openReader(idx) {
   document.getElementById('reader-cat').textContent = it.source_category || '';
   document.getElementById('reader-when').textContent = fullDate(it.published_at) || '';
   document.getElementById('reader-title').textContent = it.title || '';
-  document.getElementById('reader-summary').textContent = it.summary || 'Tidak ada ringkasan tersedia.';
   document.getElementById('reader-source').href = it.link || '#';
+
+  // Show loading, hide content
+  readerLoading.style.display = 'flex';
+  readerContent.style.display = 'none';
+  readerWordCount.textContent = '';
 
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
+
+  // Fetch full article from server
+  try {
+    const r = await fetch('/api/news/read?url=' + encodeURIComponent(it.link));
+    const d = await r.json();
+
+    readerLoading.style.display = 'none';
+
+    if (d.content && d.word_count > 10) {
+      readerContent.innerHTML = nl2p(esc(d.content));
+      readerWordCount.textContent = `${d.word_count} kata · dari ${it.source_name}`;
+    } else {
+      readerContent.innerHTML = `<p>${esc(it.summary || 'Konten tidak tersedia.')}</p>`;
+      readerWordCount.textContent = 'ringkasan singkat · sumber asli tidak dapat diambil';
+    }
+    readerContent.style.display = 'block';
+  } catch (err) {
+    readerLoading.style.display = 'none';
+    readerContent.innerHTML = `<p>${esc(it.summary || 'Gagal memuat artikel.')}</p>
+      <p style="color:var(--text-3);font-size:13px;margin-top:12px">Gagal mengambil dari sumber asli. Klik tombol di bawah untuk membaca langsung.</p>`;
+    readerContent.style.display = 'block';
+    readerWordCount.textContent = '';
+  }
 }
 
 function closeReader() {

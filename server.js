@@ -15,6 +15,7 @@ import admin from './src/routes/admin.js';
 import sitemap from './src/routes/sitemap.js';
 import rss from './src/routes/rss.js';
 import news from './src/routes/news.js';
+import newsReader from './src/routes/news-reader.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -51,6 +52,7 @@ app.use('/api/track', track);
 app.use('/api/posts', posts);
 app.use('/api/portfolio', portfolio);
 app.use('/api/news', news);
+app.use('/api/news/read', newsReader);
 app.use('/api/admin', admin);
 
 // Health check
