@@ -1,0 +1,44 @@
+[
+  {
+    "slug": "ai-support-agent",
+    "title": "AI support agent for an e-commerce platform",
+    "summary": "Custom RAG agent over 50k product docs and historical tickets. Cut response time from 12 min to 38 sec.",
+    "role": "Solo engineer — design, build, deploy",
+    "year": "2026",
+    "stack": ["OpenAI", "Pinecone", "Next.js", "Postgres", "Vercel"],
+    "highlights": [
+      "RAG pipeline with hybrid search (BM25 + embeddings)",
+      "Agent with tool use: order lookup, refund initiation, escalation",
+      "Eval harness with 200 labeled cases, 92% pass rate"
+    ],
+    "link": null
+  },
+  {
+    "slug": "vps-migration",
+    "title": "Multi-tenant SaaS migration from Heroku to bare VPS",
+    "summary": "Migrated 12 production apps off Heroku to self-managed VPS + Docker. 68% cost reduction, zero downtime.",
+    "role": "Lead infra engineer",
+    "year": "2025",
+    "stack": ["Docker", "Nginx", "Postgres", "GitHub Actions", "Prometheus"],
+    "highlights": [
+      "Containerized 12 apps with shared base image",
+      "Blue-green deploys with health checks",
+      "Observability stack with custom dashboards"
+    ],
+    "link": null
+  },
+  {
+    "slug": "realtime-dashboard",
+    "title": "Realtime analytics dashboard for IoT fleet",
+    "summary": "Sub-second dashboard for 10k+ connected devices. TimescaleDB + WebSockets + custom aggregation.",
+    "role": "Solo engineer",
+    "year": "2025",
+    "stack": ["TimescaleDB", "Node.js", "WebSockets", "React", "Redis"],
+    "highlights": [
+      "Time-series aggregation with continuous aggregates",
+      "WebSocket fan-out for 500 concurrent viewers",
+      "99.95% uptime over 6 months"
+    ],
+    "link": null
+  }
+]

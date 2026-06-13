@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — nalarjati.dev</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0a0a0f">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%238b5cf6'/><text x='50' y='65' font-family='Inter,sans-serif' font-size='52' font-weight='800' text-anchor='middle' fill='white'>n</text></svg>">
+<link rel="stylesheet" href="/assets/main.css">
+</head>
+<body>
+
+<nav class="nav scrolled" id="nav">
+  <div class="container nav-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark">n</span>
+      <span>nalarjati<span style="color: var(--text-3)">.dev</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/portfolio">Work</a>
+    </div>
+  </div>
+</nav>
+
+<main class="admin-wrap">
+  <div class="admin-header">
+    <h1>Admin</h1>
+    <a href="/" class="btn btn-secondary">← Back to site</a>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="overview">Overview</button>
+    <button class="admin-tab" data-tab="contacts">Contacts</button>
+    <button class="admin-tab" data-tab="subscribers">Subscribers</button>
+  </div>
+
+  <div id="tab-overview">
+    <div class="admin-grid" id="stats-grid"><div class="empty">Loading…</div></div>
+    <div class="admin-section">
+      <h3>Page views — last 7 days</h3>
+      <div class="bar-chart" id="bars"></div>
+      <div class="bar-labels" id="bar-labels"></div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+      <div class="admin-section">
+        <h3>Top paths (30d)</h3>
+        <div id="top-paths"></div>
+      </div>
+      <div class="admin-section">
+        <h3>Top referrers (30d)</h3>
+        <div id="top-refs"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-contacts" style="display: none;">
+    <div class="admin-section">
+      <h3>Recent contact submissions</h3>
+      <div id="contacts-list"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <div id="tab-subscribers" style="display: none;">
+    <div class="admin-section">
+      <h3>Subscribers <a href="/api/admin/subscribers.csv" style="font-size: 13px; color: var(--accent-2); margin-left: 12px;">↓ Export CSV</a></h3>
+      <div id="subs-list"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+</main>
+
+<script>
+function esc(s='') { return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+document.querySelectorAll('.admin-tab').forEach((tab) => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.admin-tab').forEach((t) => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('[id^="tab-"]').forEach((el) => el.style.display = 'none');
+    document.getElementById('tab-' + tab.dataset.tab).style.display = 'block';
+  });
+});
+
+async function loadStats() {
+  try {
+    const r = await fetch('/api/admin/stats');
+    if (r.status === 401) { location.reload(); return; }
+    const d = await r.json();
+    const t = d.totals;
+    document.getElementById('stats-grid').innerHTML = `
+      <div class="stat-card"><div class="label">Views today</div><div class="value">${t.views_today}</div></div>
+      <div class="stat-card"><div class="label">Visitors today</div><div class="value">${t.visitors_today}</div></div>
+      <div class="stat-card"><div class="label">Views (7d)</div><div class="value">${t.views_7d}</div></div>
+      <div class="stat-card"><div class="label">All-time views</div><div class="value">${t.total_views}</div></div>
+      <div class="stat-card"><div class="label">Contacts (total)</div><div class="value">${t.contact_total}</div></div>
+      <div class="stat-card"><div class="label">Subscribers</div><div class="value">${t.subscribers_total}</div></div>
+    `;
+
+    // Bar chart
+    const days = d.last7 || [];
+    const max = Math.max(1, ...days.map((x) => x.views));
+    document.getElementById('bars').innerHTML = days.map((x) => {
+      const h = (x.views / max) * 100;
+      return `<div class="bar" style="height: ${h}%" title="${x.day}: ${x.views} views, ${x.visitors} visitors"></div>`;
+    }).join('');
+    document.getElementById('bar-labels').innerHTML = days.map((x) => `<span>${x.day.slice(5)}</span>`).join('');
+
+    const tp = d.topPaths || [];
+    document.getElementById('top-paths').innerHTML = tp.length
+      ? '<table class="admin-table"><thead><tr><th>Path</th><th>Views</th></tr></thead><tbody>' + tp.map((p) => `<tr><td>${esc(p.path)}</td><td>${p.views}</td></tr>`).join('') + '</tbody></table>'
+      : '<div class="empty">No data yet.</div>';
+
+    const tr = d.topReferrers || [];
+    document.getElementById('top-refs').innerHTML = tr.length
+      ? '<table class="admin-table"><thead><tr><th>Referrer</th><th>Views</th></tr></thead><tbody>' + tr.map((p) => `<tr><td>${esc(p.ref)}</td><td>${p.views}</td></tr>`).join('') + '</tbody></table>'
+      : '<div class="empty">No data yet.</div>';
+  } catch (err) {
+    document.getElementById('stats-grid').innerHTML = '<div class="empty">Could not load stats.</div>';
+  }
+}
+
+async function loadContacts() {
+  try {
+    const r = await fetch('/api/admin/contacts');
+    const { contacts } = await r.json();
+    const el = document.getElementById('contacts-list');
+    if (!contacts.length) { el.innerHTML = '<div class="empty">No submissions yet.</div>'; return; }
+    el.innerHTML = '<table class="admin-table"><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Subject</th><th>Sent?</th><th>Date</th></tr></thead><tbody>' +
+      contacts.map((c) => `<tr>
+        <td>${c.id}</td>
+        <td>${esc(c.name)}</td>
+        <td><a href="mailto:${esc(c.email)}" style="color: var(--accent-2);">${esc(c.email)}</a></td>
+        <td>${esc(c.subject || '—')}</td>
+        <td>${c.emailed ? '✓' : '✗'}</td>
+        <td>${esc(c.created_at)}</td>
+      </tr>
+      <tr><td colspan="6" style="white-space: pre-wrap; color: var(--text-2); padding-top: 0;">${esc(c.message).slice(0, 300)}${c.message.length > 300 ? '…' : ''}</td></tr>`).join('') +
+      '</tbody></table>';
+  } catch (err) {
+    document.getElementById('contacts-list').innerHTML = '<div class="empty">Could not load.</div>';
+  }
+}
+
+async function loadSubs() {
+  try {
+    const r = await fetch('/api/admin/subscribers');
+    const { subscribers } = await r.json();
+    const el = document.getElementById('subs-list');
+    if (!subscribers.length) { el.innerHTML = '<div class="empty">No subscribers yet.</div>'; return; }
+    el.innerHTML = '<table class="admin-table"><thead><tr><th>Email</th><th>Name</th><th>Source</th><th>Subscribed</th></tr></thead><tbody>' +
+      subscribers.map((s) => `<tr>
+        <td><a href="mailto:${esc(s.email)}" style="color: var(--accent-2);">${esc(s.email)}</a></td>
+        <td>${esc(s.name || '—')}</td>
+        <td>${esc(s.source || '—')}</td>
+        <td>${esc(s.created_at)}</td>
+      </tr>`).join('') + '</tbody></table>';
+  } catch (err) {
+    document.getElementById('subs-list').innerHTML = '<div class="empty">Could not load.</div>';
+  }
+}
+
+loadStats();
+loadContacts();
+loadSubs();
+</script>
+</body>
+</html>
