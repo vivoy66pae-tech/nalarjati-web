@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0a0e1a" />
+<meta name="description" content="Jadwal lengkap FIFA World Cup 2026 - 48 tim, 104 pertandingan, 16 stadion di USA, Kanada & Meksiko. 11 Juni - 19 Juli 2026." />
+<title>Piala Dunia 2026 · Jadwal Lengkap FIFA World Cup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css?v=2" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+
+<!-- ============== NAVIGATION ============== -->
+<header class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#top" class="brand">
+      <span class="brand-trophy">🏆</span>
+      <span class="brand-text">Piala Dunia <span class="brand-year">'26</span></span>
+    </a>
+    <nav class="nav-links" id="navLinks">
+      <a href="#groups">Grup</a>
+      <a href="#schedule">Jadwal</a>
+      <a href="#bracket">Bracket</a>
+      <a href="#stadiums">Stadion</a>
+    </nav>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============== HERO ============== -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-eyebrow">
+        <span class="dot"></span> USA · KANADA · MEKSIKO
+      </div>
+      <h1 class="hero-title">
+        <span class="title-line-1">Piala Dunia</span>
+        <span class="title-line-2">2026</span>
+      </h1>
+      <p class="hero-subtitle">
+        48 tim. 104 pertandingan. 16 stadion. 1 trofi. <br>
+        <strong>11 Juni – 19 Juli 2026</strong>
+      </p>
+
+      <!-- Countdown -->
+      <div class="countdown-wrap">
+        <div class="countdown-label-top">Menuju Final · 19 Juli 2026 · MetLife Stadium</div>
+        <div class="countdown" id="countdown">
+          <div class="countdown-item">
+            <span class="countdown-num" data-unit="days">--</span>
+            <span class="countdown-label">Hari</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-item">
+            <span class="countdown-num" data-unit="hours">--</span>
+            <span class="countdown-label">Jam</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-item">
+            <span class="countdown-num" data-unit="minutes">--</span>
+            <span class="countdown-label">Menit</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-item">
+            <span class="countdown-num" data-unit="seconds">--</span>
+            <span class="countdown-label">Detik</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">48</div>
+          <div class="stat-label">Tim</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">104</div>
+          <div class="stat-label">Pertandingan</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">16</div>
+          <div class="stat-label">Stadion</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">12</div>
+          <div class="stat-label">Grup</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <span class="arrow">↓</span>
+    </div>
+  </section>
+
+  <!-- ============== GROUPS ============== -->
+  <section class="section" id="groups">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-eyebrow">BABAK GRUP</div>
+        <h2 class="section-title">12 Grup, 48 Tim</h2>
+        <p class="section-sub">Top 2 tiap grup + 8 peringkat-3 terbaik lolos ke Babak 32 Besar.</p>
+      </div>
+      <div class="groups-grid" id="groupsGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============== SCHEDULE ============== -->
+  <section class="section section-alt" id="schedule">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-eyebrow">JADWAL LENGKAP</div>
+        <h2 class="section-title">104 Pertandingan</h2>
+        <p class="section-sub">Semua waktu dikonversi ke <strong>WIB (UTC+7)</strong> supaya gampang cek dari Indonesia.</p>
+      </div>
+
+      <!-- Tabs for stages -->
+      <div class="tabs" id="stageTabs">
+        <button class="tab active" data-stage="group">Group</button>
+        <button class="tab" data-stage="r32">R32</button>
+        <button class="tab" data-stage="r16">R16</button>
+        <button class="tab" data-stage="qf">QF</button>
+        <button class="tab" data-stage="sf">SF</button>
+        <button class="tab" data-stage="final">⚡ Final</button>
+      </div>
+
+      <!-- Group filter (visible for group stage) -->
+      <div class="filter-bar" id="groupFilter">
+        <button class="filter-chip active" data-group="all">Semua</button>
+        <button class="filter-chip" data-group="A">A</button>
+        <button class="filter-chip" data-group="B">B</button>
+        <button class="filter-chip" data-group="C">C</button>
+        <button class="filter-chip" data-group="D">D</button>
+        <button class="filter-chip" data-group="E">E</button>
+        <button class="filter-chip" data-group="F">F</button>
+        <button class="filter-chip" data-group="G">G</button>
+        <button class="filter-chip" data-group="H">H</button>
+        <button class="filter-chip" data-group="I">I</button>
+        <button class="filter-chip" data-group="J">J</button>
+        <button class="filter-chip" data-group="K">K</button>
+        <button class="filter-chip" data-group="L">L</button>
+      </div>
+
+      <div class="schedule-list" id="scheduleList"></div>
+    </div>
+  </section>
+
+  <!-- ============== BRACKET ============== -->
+  <section class="section" id="bracket">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-eyebrow">KNOCKOUT STAGE</div>
+        <h2 class="section-title">Bracket Babak Gugur</h2>
+        <p class="section-sub">Dari 32 Besar sampai Final · 19 Juli 2026 di MetLife Stadium, New York</p>
+      </div>
+      <div class="bracket-wrapper" id="bracketWrapper"></div>
+    </div>
+  </section>
+
+  <!-- ============== STADIUMS ============== -->
+  <section class="section section-alt" id="stadiums">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-eyebrow">VENUES</div>
+        <h2 class="section-title">16 Stadion, 3 Negara</h2>
+        <p class="section-sub">Mulai dari Estadio Azteca (pembuka) sampai MetLife Stadium (final).</p>
+      </div>
+      <div class="venues-grid" id="venuesGrid"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div>
+      <div class="footer-brand">🏆 Piala Dunia 2026</div>
+      <p class="footer-tag">Jadwal lengkap. Bukan situs resmi FIFA.</p>
+    </div>
+    <div class="footer-meta">
+      <div>Data: draw resmi FIFA (5 Des 2025) + playoff UEFA (Mar 2026).</div>
+      <div>Dibuat dengan ❤️ untuk fans Indonesia.</div>
+    </div>
+  </div>
+</footer>
+
+<!-- Back to top -->
+<button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+
+<script src="js/data.js?v=2"></script>
+<script src="js/app.js?v=2"></script>
+</body>
+</html>
