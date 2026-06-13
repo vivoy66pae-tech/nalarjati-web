@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Berita Terbaru — nalarjati.dev</title>
+<meta name="description" content="Berita teknologi, AI, dan startup terbaru. Dikurasi otomatis dari sumber terpercaya.">
+<meta name="theme-color" content="#0a0a0f">
+<meta property="og:title" content="Berita Terbaru — nalarjati.dev">
+<meta property="og:image" content="https://nalarjati.dev/og?title=Berita%20Terbaru&subtitle=Teknologi%2C%20AI%2C%20%26%20Startup">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%238b5cf6'/><text x='50' y='65' font-family='Inter,sans-serif' font-size='52' font-weight='800' text-anchor='middle' fill='white'>n</text></svg>">
+<link rel="stylesheet" href="/assets/main.css">
+<style>
+.news-controls {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
+  padding: 16px; border-radius: var(--radius);
+  background: var(--surface); border: 1px solid var(--border);
+  align-items: center;
+}
+.news-controls .group { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.news-controls label { font-size: 12px; color: var(--text-3); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; }
+.chip {
+  font-size: 13px; padding: 5px 12px; border-radius: 999px;
+  background: var(--bg-2); border: 1px solid var(--border);
+  color: var(--text-2); cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+.chip:hover { color: var(--text); border-color: var(--border-strong); }
+.chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+.news-controls input[type=search] {
+  flex: 1; min-width: 200px; padding: 8px 12px;
+  background: var(--bg-2); border: 1px solid var(--border-strong);
+  border-radius: 8px; color: var(--text); font-size: 14px;
+  font-family: inherit;
+}
+.news-controls input[type=search]:focus { outline: none; border-color: var(--accent); }
+.news-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.news-card {
+  display: flex; flex-direction: column; padding: 20px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); transition: all 0.2s;
+  text-decoration: none; color: inherit;
+}
+.news-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.news-card .meta {
+  display: flex; gap: 8px; align-items: center; margin-bottom: 12px;
+  font-size: 12px; color: var(--text-3); flex-wrap: wrap;
+}
+.news-card .src { color: var(--accent); font-weight: 500; }
+.news-card .cat { padding: 2px 8px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--border); }
+.news-card .when { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.news-card h3 {
+  font-size: 16.5px; font-weight: 600; line-height: 1.35;
+  margin-bottom: 8px; color: var(--text);
+}
+.news-card p { font-size: 13.5px; color: var(--text-2); line-height: 1.5; margin-bottom: 12px; }
+.news-card .arrow { color: var(--text-3); font-size: 13px; margin-top: auto; display: flex; align-items: center; gap: 4px; }
+.news-card:hover .arrow { color: var(--accent); }
+.news-stats {
+  font-size: 12px; color: var(--text-3); margin-bottom: 16px;
+  display: flex; gap: 16px; flex-wrap: wrap;
+}
+.news-stats span strong { color: var(--text-2); }
+.btn-refresh {
+  font-size: 12px; padding: 5px 12px; border-radius: 6px;
+  background: var(--surface-2); border: 1px solid var(--border);
+  color: var(--text-2); cursor: pointer; font-family: inherit;
+  transition: all 0.2s;
+}
+.btn-refresh:hover { color: var(--text); border-color: var(--border-strong); }
+.empty-state {
+  text-align: center; padding: 60px 20px; color: var(--text-3);
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg);
+}
+.empty-state h3 { color: var(--text-2); margin-bottom: 8px; font-weight: 500; }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="/" class="brand">
+      <span class="brand-mark">n</span>
+      <span>nalarjati<span style="color: var(--text-3)">.dev</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="/#services">Services</a>
+      <a href="/#process">Process</a>
+      <a href="/blog">Blog</a>
+      <a href="/berita" style="color: var(--text);">Berita</a>
+      <a href="/portfolio">Work</a>
+      <a href="/#contact" class="nav-cta">
+        Get in touch
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="page-wrap" style="max-width: 1180px;">
+    <div class="page-header">
+      <h1>Berita terbaru</h1>
+      <p>Teknologi, AI, dan startup. Dikurasi otomatis dari 10+ sumber, di-refresh tiap jam.</p>
+    </div>
+
+    <div class="news-controls" id="controls">
+      <div class="group">
+        <label>Kategori</label>
+        <button class="chip active" data-cat="">Semua</button>
+        <button class="chip" data-cat="ai">AI</button>
+        <button class="chip" data-cat="tech">Tech</button>
+        <button class="chip" data-cat="startup">Startup</button>
+        <button class="chip" data-cat="dev">Dev</button>
+      </div>
+      <div class="group">
+        <label>Bahasa</label>
+        <button class="chip active" data-lang="">Semua</button>
+        <button class="chip" data-lang="id">ID</button>
+        <button class="chip" data-lang="en">EN</button>
+      </div>
+      <input type="search" id="search" placeholder="Cari judul atau ringkasan…">
+      <button class="btn-refresh" id="refresh-btn" title="Admin only: refresh feed">↻ Refresh</button>
+    </div>
+
+    <div class="news-stats" id="stats"></div>
+
+    <div id="view"><div class="empty-state">Loading…</div></div>
+  </div>
+</main>
+
+<footer>
+  <div class="container footer-inner">
+    <div>© 2026 nalarjati.dev</div>
+    <div class="footer-links">
+      <a href="/">Home</a>
+      <a href="/blog">Blog</a>
+      <a href="/portfolio">Work</a>
+      <a href="/feed.xml">RSS</a>
+      <a href="mailto:hello@nalarjati.dev">Email</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const view = document.getElementById('view');
+const statsEl = document.getElementById('stats');
+const refreshBtn = document.getElementById('refresh-btn');
+
+let state = { cat: '', lang: '', q: '' };
+
+function esc(s='') { return String(s||'').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return 'baru saja';
+  if (diff < 3600) return Math.floor(diff/60) + 'm';
+  if (diff < 86400) return Math.floor(diff/3600) + 'h';
+  if (diff < 86400*7) return Math.floor(diff/86400) + 'd';
+  return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch('/api/news/stats');
+    const d = await r.json();
+    const lastFetch = d.items.last_fetch ? new Date(d.items.last_fetch).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }) : '—';
+    statsEl.innerHTML = `
+      <span><strong>${d.sources.enabled}</strong>/${d.sources.total} sumber aktif</span>
+      <span><strong>${d.items.total}</strong> artikel</span>
+      <span>Update terakhir: <strong>${lastFetch}</strong></span>
+    `;
+  } catch (e) { /* ignore */ }
+}
+
+async function load() {
+  view.innerHTML = '<div class="empty-state">Loading…</div>';
+  const params = new URLSearchParams();
+  if (state.cat) params.set('category', state.cat);
+  if (state.lang) params.set('language', state.lang);
+  if (state.q) params.set('q', state.q);
+  params.set('limit', '60');
+  try {
+    const r = await fetch('/api/news?' + params.toString());
+    const d = await r.json();
+    if (!d.items || !d.items.length) {
+      view.innerHTML = '<div class="empty-state"><h3>Tidak ada berita</h3><p>Coba ubah filter atau tunggu refresh berikutnya.</p></div>';
+      return;
+    }
+    view.innerHTML = '<div class="news-list">' + d.items.map((it) => `
+      <a class="news-card fade-in visible" href="${esc(it.link)}" target="_blank" rel="noopener noreferrer">
+        <div class="meta">
+          <span class="src">${esc(it.source_name)}</span>
+          <span class="cat">${esc(it.source_category)}</span>
+          <span class="when">${timeAgo(it.published_at)}</span>
+        </div>
+        <h3>${esc(it.title)}</h3>
+        ${it.summary ? `<p>${esc(it.summary).slice(0, 200)}${it.summary.length > 200 ? '…' : ''}</p>` : ''}
+        <div class="arrow">Baca selengkapnya →</div>
+      </a>
+    `).join('') + '</div>';
+  } catch (err) {
+    view.innerHTML = '<div class="empty-state"><h3>Gagal memuat</h3><p>Coba refresh halaman.</p></div>';
+  }
+}
+
+// Wire up controls
+document.querySelectorAll('[data-cat]').forEach((c) => c.addEventListener('click', () => {
+  state.cat = c.dataset.cat;
+  document.querySelectorAll('[data-cat]').forEach((x) => x.classList.toggle('active', x === c));
+  load();
+}));
+document.querySelectorAll('[data-lang]').forEach((c) => c.addEventListener('click', () => {
+  state.lang = c.dataset.lang;
+  document.querySelectorAll('[data-lang]').forEach((x) => x.classList.toggle('active', x === c));
+  load();
+}));
+let searchTimer;
+document.getElementById('search').addEventListener('input', (e) => {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => { state.q = e.target.value.trim(); load(); }, 300);
+});
+
+refreshBtn.addEventListener('click', async () => {
+  refreshBtn.disabled = true;
+  refreshBtn.textContent = '↻ Refreshing…';
+  try {
+    await fetch('/api/news/refresh', { method: 'POST' });
+    await load();
+    await loadStats();
+  } catch (err) {
+    alert('Refresh butuh login admin (lihat README)');
+  } finally {
+    refreshBtn.disabled = false;
+    refreshBtn.textContent = '↻ Refresh';
+  }
+});
+
+loadStats();
+load();
+
+// Auto-refresh every 5 min while page open
+setInterval(load, 5 * 60 * 1000);
+setInterval(loadStats, 60 * 1000);
+</script>
+<script src="/assets/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+[
+  {
+    "slug": "detik",
+    "name": "Detik",
+    "url": "https://news.detik.com/rss",
+    "category": "news",
+    "language": "id"
+  },
+  {
+    "slug": "cnbc-indonesia",
+    "name": "CNBC Indonesia",
+    "url": "https://www.cnbcindonesia.com/tech/rss",
+    "category": "tech",
+    "language": "id"
+  },
+  {
+    "slug": "cnn-indonesia",
+    "name": "CNN Indonesia",
+    "url": "https://www.cnnindonesia.com/nasional/rss",
+    "category": "news",
+    "language": "id"
+  },
+  {
+    "slug": "antara",
+    "name": "Antara (terkini)",
+    "url": "https://www.antaranews.com/rss/terkini.xml",
+    "category": "news",
+    "language": "id"
+  },
+  {
+    "slug": "the-verge",
+    "name": "The Verge",
+    "url": "https://www.theverge.com/rss/index.xml",
+    "category": "tech",
+    "language": "en"
+  },
+  {
+    "slug": "techcrunch",
+    "name": "TechCrunch",
+    "url": "https://techcrunch.com/feed/",
+    "category": "startup",
+    "language": "en"
+  },
+  {
+    "slug": "hacker-news-best",
+    "name": "Hacker News (best)",
+    "url": "https://hnrss.org/best",
+    "category": "tech",
+    "language": "en"
+  },
+  {
+    "slug": "openai-blog",
+    "name": "OpenAI Blog",
+    "url": "https://openai.com/blog/rss.xml",
+    "category": "ai",
+    "language": "en"
+  },
+  {
+    "slug": "lilian-weng",
+    "name": "Lilian Weng (AI)",
+    "url": "https://lilianweng.github.io/index.xml",
+    "category": "ai",
+    "language": "en"
+  },
+  {
+    "slug": "karpathy",
+    "name": "Andrej Karpathy",
+    "url": "https://karpathy.github.io/feed.xml",
+    "category": "ai",
+    "language": "en"
+  },
+  {
+    "slug": "simon-willison",
+    "name": "Simon Willison",
+    "url": "https://simonwillison.net/atom/everything/",
+    "category": "ai",
+    "language": "en"
+  },
+  {
+    "slug": "github-blog",
+    "name": "GitHub Engineering",
+    "url": "https://github.blog/engineering/feed/",
+    "category": "dev",
+    "language": "en"
+  },
+  {
+    "slug": "lobsters",
+    "name": "Lobsters",
+    "url": "https://lobste.rs/rss",
+    "category": "dev",
+    "language": "en"
+  }
+]

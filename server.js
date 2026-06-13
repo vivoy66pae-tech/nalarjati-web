@@ -14,6 +14,7 @@ import og from './src/routes/og.js';
 import admin from './src/routes/admin.js';
 import sitemap from './src/routes/sitemap.js';
 import rss from './src/routes/rss.js';
+import news from './src/routes/news.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -49,6 +50,7 @@ app.use('/api/subscribe', subscribe);
 app.use('/api/track', track);
 app.use('/api/posts', posts);
 app.use('/api/portfolio', portfolio);
+app.use('/api/news', news);
 app.use('/api/admin', admin);
 
 // Health check
@@ -62,9 +64,11 @@ app.use(express.static(config.paths.public, {
   },
 }));
 
-// SPA fallback: /blog/* and /portfolio/* serve the index.html (which loads content via API)
+// SPA fallback: /blog/* and /portfolio/* and /berita/* serve the index.html (which loads content via API)
 app.get(/^\/blog(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'blog/index.html')));
 app.get(/^\/portfolio(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'portfolio/index.html')));
+app.get(/^\/berita(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'berita/index.html')));
+app.get(/^\/news(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'berita/index.html')));
 
 // 404
 app.use((req, res) => {

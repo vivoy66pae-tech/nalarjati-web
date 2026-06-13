@@ -49,6 +49,41 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_pageviews_path ON pageviews(path);
   CREATE INDEX IF NOT EXISTS idx_contact_created ON contact_submissions(created_at);
   CREATE INDEX IF NOT EXISTS idx_subscribers_email ON subscribers(email);
+
+  CREATE TABLE IF NOT EXISTS news_sources (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    slug TEXT NOT NULL UNIQUE,
+    name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    category TEXT NOT NULL,
+    language TEXT DEFAULT 'id',
+    enabled INTEGER DEFAULT 1,
+    last_fetched_at TEXT,
+    last_status TEXT,
+    last_error TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS news_items (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_id INTEGER NOT NULL,
+    guid TEXT NOT NULL,
+    title TEXT NOT NULL,
+    link TEXT NOT NULL,
+    summary TEXT,
+    author TEXT,
+    image_url TEXT,
+    published_at TEXT,
+    fetched_at TEXT DEFAULT (datetime('now')),
+    pinned INTEGER DEFAULT 0,
+    hidden INTEGER DEFAULT 0,
+    UNIQUE(source_id, guid),
+    FOREIGN KEY (source_id) REFERENCES news_sources(id) ON DELETE CASCADE
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_news_published ON news_items(published_at DESC);
+  CREATE INDEX IF NOT EXISTS idx_news_source ON news_items(source_id);
+  CREATE INDEX IF NOT EXISTS idx_news_hidden ON news_items(hidden);
 `);
 
 export default db;
