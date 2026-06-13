@@ -13,7 +13,7 @@ router.get('/sitemap.xml', (req, res) => {
   const base = config.siteUrl.replace(/\/$/, '');
   const posts = getAllPosts();
   const projects = loadPortfolio();
-  const staticPages = ['', '/#services', '/#process', '/#stack', '/#contact', '/blog', '/berita', '/portfolio'];
+  const staticPages = ['', '/#services', '/#process', '/#stack', '/#contact', '/blog', '/berita', '/pialadunia/', '/portfolio'];
   const today = new Date().toISOString().slice(0, 10);
 
   const urls = [
