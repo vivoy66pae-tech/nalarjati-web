@@ -14,6 +14,82 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%238b5cf6'/><text x='50' y='65' font-family='Inter,sans-serif' font-size='52' font-weight='800' text-anchor='middle' fill='white'>n</text></svg>">
 <link rel="stylesheet" href="/assets/main.css">
 <style>
+/* ======== INLINE READER MODAL ======== */
+.reader-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.reader-overlay.open { opacity: 1; pointer-events: all; }
+
+.reader-panel {
+  width: 92vw; max-width: 720px; max-height: 90vh;
+  background: var(--bg); border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg); overflow-y: auto;
+  transform: translateY(24px) scale(0.97);
+  transition: transform 0.25s ease;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+}
+.reader-overlay.open .reader-panel {
+  transform: translateY(0) scale(1);
+}
+
+.reader-panel .reader-img {
+  width: 100%; height: 260px; object-fit: cover;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  display: block; background: var(--surface);
+}
+.reader-panel .reader-body {
+  padding: 28px 32px 32px;
+}
+.reader-panel .reader-meta {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  margin-bottom: 14px; font-size: 12px; color: var(--text-3);
+}
+.reader-panel .reader-meta .src {
+  color: var(--accent); font-weight: 600; font-size: 13px;
+}
+.reader-panel .reader-meta .cat {
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--bg-2); border: 1px solid var(--border);
+}
+.reader-panel .reader-meta .when {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  margin-left: auto;
+}
+.reader-panel .reader-title {
+  font-size: 22px; font-weight: 700; line-height: 1.3;
+  margin-bottom: 16px; color: var(--text);
+}
+.reader-panel .reader-summary {
+  font-size: 15px; line-height: 1.7; color: var(--text-2);
+  margin-bottom: 24px;
+}
+.reader-panel .reader-actions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.reader-panel .reader-actions a {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 10px 20px; border-radius: 8px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  transition: all 0.15s;
+}
+.reader-panel .reader-actions .btn-source {
+  background: var(--accent); color: white;
+}
+.reader-panel .reader-actions .btn-source:hover { opacity: 0.85; }
+.reader-panel .reader-actions .btn-close {
+  background: var(--bg-2); color: var(--text-2);
+  border: 1px solid var(--border); cursor: pointer;
+}
+.reader-panel .reader-actions .btn-close:hover {
+  border-color: var(--border-strong); color: var(--text);
+}
+
+/* ======== CONTROLS ======== */
 .news-controls {
   display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;
   padding: 16px; border-radius: var(--radius);
@@ -36,28 +112,39 @@
   font-family: inherit;
 }
 .news-controls input[type=search]:focus { outline: none; border-color: var(--accent); }
+
+/* ======== NEWS GRID ======== */
 .news-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
 .news-card {
-  display: flex; flex-direction: column; padding: 20px;
+  display: flex; flex-direction: column; padding: 0;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius-lg); transition: all 0.2s;
-  text-decoration: none; color: inherit;
+  cursor: pointer; color: inherit; overflow: hidden;
 }
-.news-card:hover { border-color: var(--border-strong); transform: translateY(-2px); }
+.news-card:hover { border-color: var(--border-strong); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+.news-card .card-img {
+  width: 100%; height: 180px; object-fit: cover;
+  background: var(--bg-2);
+}
+.news-card .card-content { padding: 18px 20px 20px; flex: 1; display: flex; flex-direction: column; }
 .news-card .meta {
-  display: flex; gap: 8px; align-items: center; margin-bottom: 12px;
+  display: flex; gap: 8px; align-items: center; margin-bottom: 10px;
   font-size: 12px; color: var(--text-3); flex-wrap: wrap;
 }
 .news-card .src { color: var(--accent); font-weight: 500; }
 .news-card .cat { padding: 2px 8px; border-radius: 999px; background: var(--bg-2); border: 1px solid var(--border); }
-.news-card .when { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.news-card .when { font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-left: auto; }
 .news-card h3 {
-  font-size: 16.5px; font-weight: 600; line-height: 1.35;
+  font-size: 15.5px; font-weight: 600; line-height: 1.35;
   margin-bottom: 8px; color: var(--text);
 }
-.news-card p { font-size: 13.5px; color: var(--text-2); line-height: 1.5; margin-bottom: 12px; }
-.news-card .arrow { color: var(--text-3); font-size: 13px; margin-top: auto; display: flex; align-items: center; gap: 4px; }
-.news-card:hover .arrow { color: var(--accent); }
+.news-card p {
+  font-size: 13px; color: var(--text-2); line-height: 1.5;
+  margin-bottom: 0; flex: 1;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+/* ======== STATS & MISC ======== */
 .news-stats {
   font-size: 12px; color: var(--text-3); margin-bottom: 16px;
   display: flex; gap: 16px; flex-wrap: wrap;
@@ -132,6 +219,28 @@
   </div>
 </main>
 
+<!-- ======== INLINE READER MODAL ======== -->
+<div class="reader-overlay" id="reader-overlay">
+  <div class="reader-panel" id="reader-panel">
+    <img class="reader-img" id="reader-img" src="" alt="">
+    <div class="reader-body">
+      <div class="reader-meta">
+        <span class="src" id="reader-src"></span>
+        <span class="cat" id="reader-cat"></span>
+        <span class="when" id="reader-when"></span>
+      </div>
+      <h2 class="reader-title" id="reader-title"></h2>
+      <div class="reader-summary" id="reader-summary"></div>
+      <div class="reader-actions">
+        <a class="btn-source" id="reader-source" href="#" target="_blank" rel="noopener noreferrer">
+          Baca di sumber asli ↗
+        </a>
+        <button class="btn-close" id="reader-close">✕ Tutup</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <footer>
   <div class="container footer-inner">
     <div>© 2026 nalarjati.dev</div>
@@ -151,7 +260,9 @@ const statsEl = document.getElementById('stats');
 const refreshBtn = document.getElementById('refresh-btn');
 
 let state = { cat: '', lang: '', q: '' };
+let allItems = [];
 
+/* ======== UTILS ======== */
 function esc(s='') { return String(s||'').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
 
 function timeAgo(iso) {
@@ -166,6 +277,55 @@ function timeAgo(iso) {
   return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function fullDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return d.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+/* ======== INLINE READER ======== */
+const overlay = document.getElementById('reader-overlay');
+const readerPanel = document.getElementById('reader-panel');
+
+function openReader(idx) {
+  const it = allItems[idx];
+  if (!it) return;
+
+  const img = document.getElementById('reader-img');
+  if (it.image_url) {
+    img.src = it.image_url;
+    img.style.display = 'block';
+  } else {
+    img.style.display = 'none';
+  }
+  img.alt = it.title;
+
+  document.getElementById('reader-src').textContent = it.source_name || '';
+  document.getElementById('reader-cat').textContent = it.source_category || '';
+  document.getElementById('reader-when').textContent = fullDate(it.published_at) || '';
+  document.getElementById('reader-title').textContent = it.title || '';
+  document.getElementById('reader-summary').textContent = it.summary || 'Tidak ada ringkasan tersedia.';
+  document.getElementById('reader-source').href = it.link || '#';
+
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeReader() {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('reader-close').addEventListener('click', closeReader);
+overlay.addEventListener('click', (e) => {
+  if (e.target === overlay) closeReader();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && overlay.classList.contains('open')) closeReader();
+});
+
+/* ======== LOAD STATS ======== */
 async function loadStats() {
   try {
     const r = await fetch('/api/news/stats');
@@ -179,6 +339,7 @@ async function loadStats() {
   } catch (e) { /* ignore */ }
 }
 
+/* ======== LOAD & RENDER ======== */
 async function load() {
   view.innerHTML = '<div class="empty-state">Loading…</div>';
   const params = new URLSearchParams();
@@ -193,24 +354,27 @@ async function load() {
       view.innerHTML = '<div class="empty-state"><h3>Tidak ada berita</h3><p>Coba ubah filter atau tunggu refresh berikutnya.</p></div>';
       return;
     }
-    view.innerHTML = '<div class="news-list">' + d.items.map((it) => `
-      <a class="news-card fade-in visible" href="${esc(it.link)}" target="_blank" rel="noopener noreferrer">
-        <div class="meta">
-          <span class="src">${esc(it.source_name)}</span>
-          <span class="cat">${esc(it.source_category)}</span>
-          <span class="when">${timeAgo(it.published_at)}</span>
+    allItems = d.items;
+    view.innerHTML = '<div class="news-list">' + d.items.map((it, i) => `
+      <div class="news-card fade-in visible" onclick="openReader(${i})">
+        ${it.image_url ? `<img class="card-img" src="${esc(it.image_url)}" alt="${esc(it.title)}" loading="lazy" onerror="this.style.display='none'">` : ''}
+        <div class="card-content">
+          <div class="meta">
+            <span class="src">${esc(it.source_name)}</span>
+            <span class="cat">${esc(it.source_category)}</span>
+            <span class="when">${timeAgo(it.published_at)}</span>
+          </div>
+          <h3>${esc(it.title)}</h3>
+          ${it.summary ? `<p>${esc(it.summary)}</p>` : ''}
         </div>
-        <h3>${esc(it.title)}</h3>
-        ${it.summary ? `<p>${esc(it.summary).slice(0, 200)}${it.summary.length > 200 ? '…' : ''}</p>` : ''}
-        <div class="arrow">Baca selengkapnya →</div>
-      </a>
+      </div>
     `).join('') + '</div>';
   } catch (err) {
     view.innerHTML = '<div class="empty-state"><h3>Gagal memuat</h3><p>Coba refresh halaman.</p></div>';
   }
 }
 
-// Wire up controls
+/* ======== CONTROLS ======== */
 document.querySelectorAll('[data-cat]').forEach((c) => c.addEventListener('click', () => {
   state.cat = c.dataset.cat;
   document.querySelectorAll('[data-cat]').forEach((x) => x.classList.toggle('active', x === c));
@@ -245,7 +409,6 @@ refreshBtn.addEventListener('click', async () => {
 loadStats();
 load();
 
-// Auto-refresh every 5 min while page open
 setInterval(load, 5 * 60 * 1000);
 setInterval(loadStats, 60 * 1000);
 </script>
