@@ -156,9 +156,8 @@ Right now submissions are saved to SQLite and logged but **not emailed**. To ena
 
 URL: `https://nalarjati.dev/admin/`
 
-Default credentials (CHANGE THESE!):
-- Username: `admin`
-- Password: `nalarjati-2026`
+Default credentials are loaded from `/opt/nalarjati/.env` (`ADMIN_USER`, `ADMIN_PASS`).
+See `.env.example` for the expected format. Do **not** commit real values to this repo.
 
 To change, edit `/opt/nalarjati/.env` (ADMIN_USER, ADMIN_PASS) and run:
 ```bash
