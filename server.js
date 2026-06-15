@@ -71,6 +71,7 @@ app.get(/^\/blog(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 
 app.get(/^\/portfolio(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'portfolio/index.html')));
 app.get(/^\/berita(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'berita/index.html')));
 app.get(/^\/news(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'berita/index.html')));
+app.get(/^\/horor(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'horor/index.html')));
 
 // 404
 app.use((req, res) => {
