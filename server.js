@@ -16,6 +16,7 @@ import sitemap from './src/routes/sitemap.js';
 import rss from './src/routes/rss.js';
 import news from './src/routes/news.js';
 import newsReader from './src/routes/news-reader.js';
+import system from './src/routes/system.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -53,6 +54,7 @@ app.use('/api/posts', posts);
 app.use('/api/portfolio', portfolio);
 app.use('/api/news', news);
 app.use('/api/news/read', newsReader);
+app.use('/api/system', system);
 app.use('/api/admin', admin);
 
 // Health check
@@ -72,6 +74,7 @@ app.get(/^\/portfolio(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.pub
 app.get(/^\/berita(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'berita/index.html')));
 app.get(/^\/news(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'berita/index.html')));
 app.get(/^\/horor(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'horor/index.html')));
+app.get(/^\/sistem(\/.*)?$/, (req, res) => res.sendFile(join(config.paths.public, 'sistem/index.html')));
 
 // 404
 app.use((req, res) => {

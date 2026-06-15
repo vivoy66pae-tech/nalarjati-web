@@ -67,6 +67,15 @@ section { padding: 96px 0; position: relative; }
 .nav-cta:hover { background: var(--text); color: var(--bg); border-color: var(--text); }
 @media (max-width: 720px) { .nav-links { gap: 16px; } .nav-links a:not(.nav-cta) { display: none; } }
 
+/* Nav: live indicator for /sistem link */
+.live-dot {
+  display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--success); box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}
+.nav-sistem-inline { display: inline-flex; align-items: center; gap: 6px; }
+@keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
 /* ====== Hero ====== */
 .hero { padding-top: 180px; padding-bottom: 96px; text-align: center; position: relative; overflow: hidden; }
 .hero-orb {
