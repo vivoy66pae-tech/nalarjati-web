@@ -74,6 +74,7 @@ section { padding: 96px 0; position: relative; }
   animation: pulse-dot 1.8s ease-in-out infinite;
 }
 .nav-sistem-inline { display: inline-flex; align-items: center; gap: 6px; }
+.nav-downloader-inline { display: inline-flex; align-items: center; gap: 6px; }
 @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
 /* ====== Hero ====== */
